@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Shop {
+  id String @id @default(cuid())
+  domain String @unique
+  name String?
+  shopifyShopId String?
+  encryptedAccessToken String
+  grantedScopes String @default("")
+  apiVersion String @default("2026-07")
+  status ShopStatus @default(ACTIVE)
+  connectedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  locations Location[]
+  products Product[]
+  variants Variant[]
+  inventoryLevels InventoryLevel[]
+  adjustments InventoryAdjustment[]
+}
+
+model Location {
+  id String @id @default(cuid())
+  shopId String
+  shopifyLocationId String
+  name String
+  active Boolean @default(true)
+  excluded Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  inventoryLevels InventoryLevel[]
+  adjustments InventoryAdjustment[]
+  @@unique([shopId, shopifyLocationId])
+}
+
+model Product {
+  id String @id @default(cuid())
+  shopId String
+  shopifyProductId String
+  title String
+  family String?
+  productType String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  variants Variant[]
+  @@unique([shopId, shopifyProductId])
+}
+
+model Variant {
+  id String @id @default(cuid())
+  shopId String
+  productId String
+  shopifyVariantId String
+  shopifyInventoryItemId String
+  title String
+  sku String?
+  barcode String?
+  optionSize String?
+  optionColor String?
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventoryLevels InventoryLevel[]
+  adjustments InventoryAdjustment[]
+  @@unique([shopId, shopifyVariantId])
+}
+
+model InventoryLevel {
+  id String @id @default(cuid())
+  shopId String
+  variantId String
+  locationId String
+  availableQty Int @default(0)
+  onHandQty Int @default(0)
+  syncedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  variant Variant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  @@unique([variantId, locationId])
+}
+
+model InventoryAdjustment {
+  id String @id @default(cuid())
+  shopId String
+  variantId String
+  locationId String
+  beforeQuantity Int
+  afterQuantity Int
+  delta Int
+  reason String
+  customReason String?
+  idempotencyKey String @unique
+  shopifyRequestId String?
+  createdAt DateTime @default(now())
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  variant Variant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+}
+
+enum ShopStatus { ACTIVE DISCONNECTED ERROR }
