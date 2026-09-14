@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_DB: stockify
+      POSTGRES_USER: stockify
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Lancer pnpm setup:local avant de démarrer}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - stockify-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stockify -d stockify"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  stockify-db:

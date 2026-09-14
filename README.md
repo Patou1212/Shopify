@@ -49,3 +49,7 @@ La synchronisation est manuelle et s'exécute dans la requête serveur. Prévoir
 L'historique couvre les opérations faites ici, pas les mouvements externes. Les webhooks et la synchronisation planifiée ne sont pas inclus. Les erreurs après un succès Shopify conservent la demande pour reprise ; si la relecture des quantités échoue, resynchroniser l'inventaire. L'identité de l'auteur est actuellement la session boutique, sans comptes employés distincts.
 
 Références : [inventoryAdjustQuantities](https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryAdjustQuantities), [InventoryChangeInput](https://shopify.dev/docs/api/admin-graphql/latest/input-objects/InventoryChangeInput).
+
+## Mise en service
+
+Suivre [le guide de mise en service](docs/MISE-EN-SERVICE.md) pour préparer PostgreSQL, configurer Shopify et héberger le serveur.
