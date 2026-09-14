@@ -1,0 +1,43 @@
+name: Verify Stockify
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-bookworm
+        env:
+          POSTGRES_USER: stockify
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: stockify
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U stockify -d stockify"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://stockify:ci-only-password@localhost:5432/stockify?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --global pnpm@11.19.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm db:generate
+      - run: pnpm db:deploy
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm exec tsc --noEmit
+      - name: Check server and database
+        run: |
+          pnpm start > /tmp/stockify.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://localhost:3000/api/health; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/stockify.log
+          exit 1
