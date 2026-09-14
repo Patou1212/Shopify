@@ -19,6 +19,9 @@ model Shop {
   connectedAt DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  lastSyncedAt DateTime?
+  operationToken String?
+  operationExpiresAt DateTime?
   locations Location[]
   products Product[]
   variants Variant[]
@@ -97,6 +100,8 @@ model InventoryAdjustment {
   shopId String
   variantId String
   locationId String
+  status String @default("PENDING")
+  error String?
   beforeQuantity Int
   afterQuantity Int
   delta Int
@@ -110,4 +115,8 @@ model InventoryAdjustment {
   location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
 }
 
-enum ShopStatus { ACTIVE DISCONNECTED ERROR }
+enum ShopStatus {
+  ACTIVE
+  DISCONNECTED
+  ERROR
+}
