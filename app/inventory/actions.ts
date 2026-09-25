@@ -1,13 +1,17 @@
 "use server";
 import { DEMO_SHOP_ID, adjustDemo } from "@/lib/demo";
 import { db } from "@/lib/db";
-import { requireShop } from "@/lib/session";
+import { requireShop, currentSessionId } from "@/lib/session";
 import { synchronize } from "@/lib/shopify/sync";
 import { adjust } from "@/lib/shopify/adjust";
 import { revalidatePath } from "next/cache";
 export async function syncAction() {
   const shop = await requireShop();
-  if(shop.id === DEMO_SHOP_ID) return {message:"Démonstration : les données sont fictives, aucune synchronisation Shopify effectuée."};
+  if (shop.id === DEMO_SHOP_ID)
+    return {
+      message:
+        "Démonstration : les données sont fictives, aucune synchronisation Shopify effectuée.",
+    };
   try {
     const result = await synchronize(shop);
     revalidatePath("/inventory");
@@ -37,6 +41,7 @@ export async function adjustAction(
       delta,
       reason,
       key,
+      await currentSessionId(),
     );
     revalidatePath("/inventory");
     revalidatePath("/history");

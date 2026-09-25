@@ -1,3 +1,5 @@
+import { inventorySnapshot } from "@/lib/audit";
+import { diffSnapshots } from "@/lib/audit-diff";
 import type { Shop } from "@prisma/client";
 import { db } from "@/lib/db";
 import { shopifyGraphql } from "./graphql";
@@ -72,6 +74,7 @@ export async function synchronize(shop: Shop) {
     // Publish only after every remote page succeeds; readers never see a partial snapshot.
     await db.$transaction(
       async (tx) => {
+        const before = await inventorySnapshot(tx, shop.id);
         const owned = await tx.shop.updateMany({
           where: {
             id: shop.id,
@@ -170,6 +173,21 @@ export async function synchronize(shop: Shop) {
             });
           }
         }
+        const changes = diffSnapshots(
+          before,
+          await inventorySnapshot(tx, shop.id),
+          !shop.lastSyncedAt,
+        );
+        if (changes.length)
+          await tx.auditEvent.createMany({
+            data: changes.map((change) => ({
+              ...change,
+              shopId: shop.id,
+              source: "Synchronisation Shopify",
+              actor:
+                "Auteur inconnu — changement détecté entre deux synchronisations",
+            })),
+          });
       },
       { timeout: 120000 },
     );

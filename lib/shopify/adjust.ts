@@ -11,6 +11,7 @@ export async function adjust(
   delta: number,
   reason: string,
   key: string,
+  actorSessionId?: string,
 ) {
   if (
     !Number.isInteger(delta) ||
@@ -71,6 +72,7 @@ export async function adjust(
         reason: "correction",
         customReason: reason,
         idempotencyKey: key,
+        actorSessionId,
         beforeQuantity: level.availableQty,
         afterQuantity: level.availableQty + delta,
       },

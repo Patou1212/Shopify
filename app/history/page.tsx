@@ -25,6 +25,13 @@ export default async function History({
         Les mouvements effectués hors de Stockify ne figurent pas dans cet
         historique.
       </p>
+      <p>
+        Les sessions actuelles identifient une boutique, pas encore une
+        personne.{" "}
+        <a href="/audit?tab=stock">
+          Voir les écarts détectés lors des synchronisations →
+        </a>
+      </p>
       <div className="table-wrap">
         <table className="table">
           <thead>
@@ -32,6 +39,7 @@ export default async function History({
               <th>Date</th>
               <th>Produit / variante</th>
               <th>Emplacement</th>
+              <th>Auteur / session</th>
               <th>Avant → Après</th>
               <th>Variation</th>
               <th>Motif</th>
@@ -46,6 +54,11 @@ export default async function History({
                   {r.variant.product.title} · {r.variant.title}
                 </td>
                 <td>{r.location.name}</td>
+                <td>
+                  {r.actorSessionId
+                    ? `Session ${r.actorSessionId}`
+                    : "Auteur non identifié (ancienne session)"}
+                </td>
                 <td>
                   {r.status === "APPLIED"
                     ? `${r.beforeQuantity} → ${r.afterQuantity}`

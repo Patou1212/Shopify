@@ -1377,3 +1377,44 @@ hr {
     display: none;
   }
 }
+.audit-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 22px 0;
+}
+.audit-tabs a {
+  padding: 12px 16px;
+  border: 1px solid #e1e6df;
+  border-radius: 8px;
+  color: #526b5d;
+  text-decoration: none;
+  font-size: 13px;
+}
+.audit-tabs a[aria-current="page"] {
+  background: #176b56;
+  color: white;
+  border-color: #176b56;
+}
+.audit-notice {
+  background: #f5f0e5;
+  border: 1px solid #e9dfca;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  color: #685c40;
+}
+.audit-source {
+  display: block;
+  color: #79847c;
+  margin-top: 7px;
+}
+.audit-detail {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-width: 450px;
+}
+.portal-nav {
+  flex-wrap: wrap;
+}

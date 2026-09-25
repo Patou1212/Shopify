@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+import { logConnection } from "@/lib/audit";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { encryptSecret } from "@/lib/crypto";
@@ -53,7 +55,9 @@ export async function GET(request: NextRequest) {
     const response = NextResponse.redirect(
       new URL(`/dashboard?shop=${encodeURIComponent(shop)}`, request.url),
     );
-    response.cookies.set("stockify_session", sessionToken(stored.id), {
+    const sid = randomUUID();
+    await logConnection(stored.id, sid, false);
+    response.cookies.set("stockify_session", sessionToken(stored.id, sid), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

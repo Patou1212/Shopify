@@ -27,6 +27,7 @@ model Shop {
   variants Variant[]
   inventoryLevels InventoryLevel[]
   adjustments InventoryAdjustment[]
+  auditEvents AuditEvent[]
 }
 
 model Location {
@@ -107,6 +108,7 @@ model InventoryAdjustment {
   delta Int
   reason String
   customReason String?
+  actorSessionId String?
   idempotencyKey String @unique
   shopifyRequestId String?
   createdAt DateTime @default(now())
@@ -119,4 +121,18 @@ enum ShopStatus {
   ACTIVE
   DISCONNECTED
   ERROR
+}
+
+model AuditEvent {
+  id String @id @default(cuid())
+  shopId String
+  category String
+  action String
+  subject String
+  source String
+  actor String
+  details String
+  createdAt DateTime @default(now())
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  @@index([shopId, category, createdAt])
 }

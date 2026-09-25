@@ -31,7 +31,9 @@ export function Portal({
             "Statistiques",
             `/dashboard?shop=${encodeURIComponent(shop.domain)}`,
           ],
-          ["history", "Historique", "/history"],
+          ["history", "Mouvements de stock", "/history"],
+          ["connections", "Connexions", "/audit?tab=connections"],
+          ["audit", "Activité produits", "/audit?tab=products"],
           ["settings", "Gestion du compte", "/settings"],
         ].map(([key, label, url]) => (
           <a
