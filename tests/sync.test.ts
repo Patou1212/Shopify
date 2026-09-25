@@ -11,6 +11,8 @@ const mocks = vi.hoisted(() => ({
   locationDeactivate: vi.fn(),
   variantDeactivate: vi.fn(),
   shopUpdate: vi.fn(),
+  snapshot: vi.fn(),
+  auditCreate: vi.fn(),
 }));
 vi.mock("@/lib/db", () => ({ db: { $transaction: mocks.transaction } }));
 vi.mock("../lib/shopify/graphql", () => ({ shopifyGraphql: mocks.graphql }));
@@ -44,6 +46,7 @@ const variant = {
 };
 beforeEach(() => {
   vi.resetAllMocks();
+  mocks.snapshot.mockResolvedValue([]);
   mocks.shopUpdate.mockResolvedValue({ count: 1 });
   mocks.locationUpsert.mockResolvedValue({ id: "local-location" });
   mocks.productUpsert.mockResolvedValue({ id: "local-product" });
@@ -55,7 +58,9 @@ beforeEach(() => {
         updateMany: mocks.locationDeactivate,
         upsert: mocks.locationUpsert,
       },
+      auditEvent: { createMany: mocks.auditCreate },
       variant: {
+        findMany: mocks.snapshot,
         updateMany: mocks.variantDeactivate,
         upsert: mocks.variantUpsert,
       },
@@ -120,4 +125,11 @@ test("a late remote failure leaves the entire previous snapshot untouched", asyn
   );
   expect(mocks.transaction).not.toHaveBeenCalled();
   expect(mocks.deleteLevels).not.toHaveBeenCalled();
+});
+
+test("audit changes are saved in the same transaction with unknown external actor", async () => {
+  const base={id:"v",productId:"p",title:"M",sku:"sku",barcode:null,optionSize:"M",optionColor:null,product:{title:"T-shirt",productType:"Hauts",family:null}};
+  mocks.snapshot.mockResolvedValueOnce([{...base,inventoryLevels:[{locationId:"l",location:{name:"Paris"},availableQty:10,onHandQty:12}]}]).mockResolvedValueOnce([{...base,inventoryLevels:[{locationId:"l",location:{name:"Paris"},availableQty:3,onHandQty:5}]}]);
+  await synchronize({id:"shop",lastSyncedAt:new Date()} as Shop);
+  expect(mocks.auditCreate).toHaveBeenCalledWith({data:[expect.objectContaining({shopId:"shop",category:"stock",action:"Modification détectée",source:"Synchronisation Shopify",actor:expect.stringContaining("Auteur inconnu"),details:expect.stringContaining("Disponible : 10")})]});
 });

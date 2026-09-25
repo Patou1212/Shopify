@@ -1,3 +1,4 @@
+import { Portal } from "@/app/components/portal";
 import { RetryAdjustment } from "@/app/inventory/controls";
 import { requireShop } from "@/lib/session";
 import { db } from "@/lib/db";
@@ -17,12 +18,19 @@ export default async function History({
     take: 51,
   });
   return (
-    <main className="content">
+    <Portal active="history" shop={shop}>
       <a href="/inventory">← Inventaire</a>
       <h1>Historique des ajustements Stockify</h1>
       <p>
         Les mouvements effectués hors de Stockify ne figurent pas dans cet
         historique.
+      </p>
+      <p>
+        Les sessions actuelles identifient une boutique, pas encore une
+        personne.{" "}
+        <a href="/audit?tab=stock">
+          Voir les écarts détectés lors des synchronisations →
+        </a>
       </p>
       <div className="table-wrap">
         <table className="table">
@@ -31,6 +39,7 @@ export default async function History({
               <th>Date</th>
               <th>Produit / variante</th>
               <th>Emplacement</th>
+              <th>Auteur / session</th>
               <th>Avant → Après</th>
               <th>Variation</th>
               <th>Motif</th>
@@ -45,6 +54,11 @@ export default async function History({
                   {r.variant.product.title} · {r.variant.title}
                 </td>
                 <td>{r.location.name}</td>
+                <td>
+                  {r.actorSessionId
+                    ? `Session ${r.actorSessionId}`
+                    : "Auteur non identifié (ancienne session)"}
+                </td>
                 <td>
                   {r.status === "APPLIED"
                     ? `${r.beforeQuantity} → ${r.afterQuantity}`
@@ -71,6 +85,6 @@ export default async function History({
       {!rows.length && <p>Aucun ajustement.</p>}
       {page > 1 && <a href={`/history?page=${page - 1}`}>Précédent</a>}{" "}
       {rows.length > 50 && <a href={`/history?page=${page + 1}`}>Suivant</a>}
-    </main>
+    </Portal>
   );
 }
