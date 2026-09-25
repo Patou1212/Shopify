@@ -1,3 +1,4 @@
+import { Portal } from "@/app/components/portal";
 import { RetryAdjustment } from "@/app/inventory/controls";
 import { requireShop } from "@/lib/session";
 import { db } from "@/lib/db";
@@ -17,7 +18,7 @@ export default async function History({
     take: 51,
   });
   return (
-    <main className="content">
+    <Portal active="history" shop={shop}>
       <a href="/inventory">← Inventaire</a>
       <h1>Historique des ajustements Stockify</h1>
       <p>
@@ -71,6 +72,6 @@ export default async function History({
       {!rows.length && <p>Aucun ajustement.</p>}
       {page > 1 && <a href={`/history?page=${page - 1}`}>Précédent</a>}{" "}
       {rows.length > 50 && <a href={`/history?page=${page + 1}`}>Suivant</a>}
-    </main>
+    </Portal>
   );
 }

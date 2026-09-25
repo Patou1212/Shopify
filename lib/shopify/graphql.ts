@@ -5,6 +5,7 @@ export async function shopifyGraphql<T>(
   query: string,
   variables: Record<string, unknown> = {},
 ): Promise<T> {
+  if (shop.id === "stockify-local-demo") throw new Error("La boutique fictive ne peut pas contacter Shopify");
   for (let attempt = 0; attempt < 5; attempt++) {
     const response = await fetch(
       `https://${shop.domain}/admin/api/${shop.apiVersion}/graphql.json`,
