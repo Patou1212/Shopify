@@ -13,7 +13,7 @@ try {
       throw new Error("Adresse e-mail invalide");
     const token = randomBytes(32).toString("hex");
     await db.$transaction(async (tx) => {
-      await tx.$queryRaw`SELECT pg_advisory_xact_lock(721549)`;
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(721549)`;
       if (
         command === "bootstrap" &&
         (await tx.account.count({ where: { platformAdmin: true } }))
