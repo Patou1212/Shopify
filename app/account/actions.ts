@@ -1,4 +1,6 @@
 "use server";
+import { registerAccount } from "@/lib/registration";
+import { synchronize } from "@/lib/shopify/sync";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -251,4 +253,77 @@ export async function updateClient(form: FormData) {
     });
   });
   revalidatePath("/admin");
+}
+
+export async function register(_: Result, form: FormData): Promise<Result> {
+  if (!saasEnabled() || process.env.STOCKIFY_PUBLIC_SIGNUP === "false")
+    return { error: "Les inscriptions sont momentanément fermées." };
+  const name = field(form, "name"),
+    email = field(form, "email").toLowerCase();
+  const password = String(form.get("password") || "");
+  if (
+    !name ||
+    name.length > 100 ||
+    email.length > 254 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  )
+    return { error: "Renseignez votre nom et une adresse e-mail valide." };
+  if (password.length < 12 || password.length > 256)
+    return { error: "Choisissez un mot de passe de 12 à 256 caractères." };
+  if (password !== String(form.get("confirmPassword") || ""))
+    return { error: "Les deux mots de passe ne correspondent pas." };
+  if (field(form, "website")) return { error: "Inscription indisponible." };
+  if (
+    !(await throttle(`register:${email}`)) ||
+    !(await throttle("register-global"))
+  )
+    return {
+      error: "Trop de tentatives d’inscription. Réessayez dans 15 minutes.",
+    };
+  let account;
+  try {
+    account = await registerAccount(name, email, password);
+  } catch (e) {
+    if (e instanceof Error && "code" in e && e.code === "P2002")
+      return {
+        error:
+          "Cette adresse est déjà enregistrée ou invitée. Connectez-vous ou utilisez votre invitation.",
+      };
+    return {
+      error:
+        "Impossible de créer votre compte pour le moment. Réessayez dans quelques instants.",
+    };
+  }
+  await createSession(account.id);
+  (await cookies()).delete("stockify_session");
+  redirect("/account?welcome=1");
+}
+
+export async function importShop(
+  _: { error?: string; message?: string },
+  form: FormData,
+): Promise<{ error?: string; message?: string }> {
+  await requireAccount();
+  const shop = await db.shop.findUnique({
+    where: { id: field(form, "shopId") },
+  });
+  if (!shop?.workspaceId || shop.status !== "ACTIVE")
+    return {
+      error: "Boutique indisponible. Reconnectez-la depuis Mes boutiques.",
+    };
+  await requireWorkspace(shop.workspaceId, ["OWNER", "MANAGER"]);
+  try {
+    const result = await synchronize(shop);
+    revalidatePath("/account");
+    revalidatePath("/inventory");
+    revalidatePath("/dashboard");
+    return {
+      message: `Import terminé : ${result.variants} variantes et ${result.locations} emplacements disponibles.`,
+    };
+  } catch {
+    return {
+      error:
+        "L’import n’a pas abouti. Vos données précédentes sont conservées. Réessayez dans quelques instants ; si l’autorisation Shopify a été retirée, reconnectez la boutique.",
+    };
+  }
 }

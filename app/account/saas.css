@@ -124,3 +124,145 @@
     padding: 24px 16px;
   }
 }
+.saas-brand {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-decoration: none;
+}
+.saas-brand span {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #617080;
+  margin-top: 6px;
+}
+.onboarding-steps {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 30px 0;
+  gap: 22px;
+}
+.onboarding-steps li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #687683;
+  font-size: 14px;
+}
+.onboarding-steps li span {
+  display: grid;
+  place-items: center;
+  border: 1px solid #d3dce1;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+.onboarding-steps .current {
+  font-weight: 700;
+  color: #00775f;
+}
+.onboarding-steps .current span,
+.onboarding-steps .done span {
+  background: #00775f;
+  color: white;
+  border-color: #00775f;
+}
+.saas-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 16px;
+}
+.saas-section-heading h2 {
+  margin: 0;
+}
+.onboarding-card {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 45px;
+  padding: 35px;
+}
+.onboarding-card h3 {
+  font-size: 27px;
+  letter-spacing: -0.6px;
+}
+.workspace-section {
+  margin-bottom: 45px;
+}
+.saas-success {
+  border: 1px solid #c9e7dc;
+  background: #edf9f2;
+  padding: 14px 18px;
+  border-radius: 10px;
+  color: #006b53 !important;
+}
+.saas-shell .saas-secondary {
+  background: white;
+  color: #344454;
+  border: 1px solid #d5dde3;
+}
+.saas-shell summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 8px 0;
+}
+.team-section > summary {
+  font-size: 18px;
+}
+.shop-options {
+  margin-top: 24px;
+}
+.saas-domain {
+  overflow-wrap: anywhere;
+}
+.saas-spinner {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  border: 2px solid #c8ddd7;
+  border-top-color: #00775f;
+  border-radius: 50%;
+  animation: saas-spin 1s linear infinite;
+  margin-right: 8px;
+}
+.import-status {
+  padding: 12px;
+  background: #f1f6f5;
+  border-radius: 8px;
+}
+.saas-shell button:focus-visible,
+.saas-shell a:focus-visible,
+.saas-shell summary:focus-visible {
+  outline: 3px solid #00b597;
+  outline-offset: 4px;
+}
+@keyframes saas-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .saas-spinner {
+    animation: none;
+  }
+}
+@media (max-width: 750px) {
+  .onboarding-card {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+  .onboarding-steps {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .saas-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

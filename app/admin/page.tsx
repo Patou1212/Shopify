@@ -20,10 +20,12 @@ export default async function AdminPage() {
       <header className="saas-header">
         <div>
           <span className="saas-tag">STOCKIFY · ADMINISTRATION</span>
-          <h1>Vos espaces clients</h1>
-          <p>Offres, quotas de boutiques et accès à la plateforme.</p>
+          <h1>Mes clients</h1>
+          <p>
+            Gérez les clients, leur accès et le nombre de boutiques autorisées.
+          </p>
         </div>
-        <a href="/account">Mon espace</a>
+        <a href="/account">Mes boutiques</a>
       </header>
       {unassigned > 0 && (
         <p className="saas-notice">
@@ -37,8 +39,8 @@ export default async function AdminPage() {
         <InvitationForm />
       </details>
       <p>
-        Les 100 espaces les plus récents. Les offres sont gérées manuellement,
-        sans prélèvement automatique.
+        Les 100 clients les plus récents. Accès gratuit pendant la phase de
+        test.
       </p>
       <div className="saas-grid">
         {workspaces.map((w) => (
@@ -47,7 +49,10 @@ export default async function AdminPage() {
             <p>
               {w._count.shops} boutique(s) · {w._count.members} membre(s)
             </p>
-            <code>{w.id}</code>
+            <details>
+              <summary>Informations techniques</summary>
+              <code>{w.id}</code>
+            </details>
             <form action={updateClient} className="saas-form">
               <input type="hidden" name="workspaceId" value={w.id} />
               <label>
@@ -60,7 +65,7 @@ export default async function AdminPage() {
                 />
               </label>
               <label>
-                Quota boutiques
+                Nombre de boutiques autorisées
                 <input
                   type="number"
                   name="shopLimit"

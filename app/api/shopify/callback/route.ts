@@ -1,3 +1,4 @@
+import { ShopLinkError } from "@/lib/onboarding";
 import { saasEnabled, requireAccount, requireWorkspace } from "@/lib/account";
 import { linkShop } from "@/lib/tenant";
 import { requireShopifyConfig } from "@/lib/shopify/config";
@@ -24,15 +25,30 @@ export async function GET(request: NextRequest) {
     shop !== request.cookies.get("stockify_oauth_shop")?.value
   )
     return NextResponse.redirect(
-      new URL("/?error=shop_mismatch", requireShopifyConfig().appUrl),
+      new URL(
+        saasEnabled()
+          ? "/account?error=shop_mismatch"
+          : "/?error=shop_mismatch",
+        requireShopifyConfig().appUrl,
+      ),
     );
   if (!state || state !== request.cookies.get("stockify_oauth_state")?.value)
     return NextResponse.redirect(
-      new URL("/?error=invalid_state", requireShopifyConfig().appUrl),
+      new URL(
+        saasEnabled()
+          ? "/account?error=invalid_state"
+          : "/?error=invalid_state",
+        requireShopifyConfig().appUrl,
+      ),
     );
   if (!verifyOAuthHmac(p) || !code)
     return NextResponse.redirect(
-      new URL("/?error=invalid_callback", requireShopifyConfig().appUrl),
+      new URL(
+        saasEnabled()
+          ? "/account?error=invalid_callback"
+          : "/?error=invalid_callback",
+        requireShopifyConfig().appUrl,
+      ),
     );
   try {
     let binding: { workspaceId: string; accountId: string } | undefined;
@@ -98,7 +114,9 @@ export async function GET(request: NextRequest) {
         });
     const response = NextResponse.redirect(
       new URL(
-        `/dashboard?shop=${encodeURIComponent(stored.domain)}`,
+        saasEnabled()
+          ? `/account?connected=${encodeURIComponent(stored.id)}`
+          : `/dashboard?shop=${encodeURIComponent(stored.domain)}`,
         requireShopifyConfig().appUrl,
       ),
     );
@@ -115,10 +133,12 @@ export async function GET(request: NextRequest) {
     response.cookies.delete("stockify_oauth_state");
     response.cookies.delete("stockify_oauth_shop");
     return response;
-  } catch {
+  } catch (error) {
     return NextResponse.redirect(
       new URL(
-        saasEnabled() ? "/account?error=oauth_failed" : "/?error=oauth_failed",
+        saasEnabled()
+          ? `/account?error=${error instanceof ShopLinkError ? error.code : "oauth_failed"}`
+          : "/?error=oauth_failed",
         requireShopifyConfig().appUrl,
       ),
     );

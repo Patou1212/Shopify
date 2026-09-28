@@ -1,3 +1,4 @@
+import { ShopLinkError } from "@/lib/onboarding";
 import { db } from "@/lib/db";
 import { encryptSecret } from "@/lib/crypto";
 import { SHOPIFY_API_VERSION } from "@/lib/shopify/config";
@@ -26,11 +27,15 @@ export function assertLinkAllowed(
   existingWorkspace: string | null | undefined,
   workspaceId: string,
 ) {
-  if (workspace.suspended) throw new Error("Espace suspendu.");
+  if (workspace.suspended)
+    throw new ShopLinkError("workspace_unavailable", "Espace suspendu.");
   if (existingWorkspace !== undefined && existingWorkspace !== workspaceId)
-    throw new Error("Cette boutique est déjà enregistrée. Contactez Stockify.");
+    throw new ShopLinkError(
+      existingWorkspace === null ? "shop_unassigned" : "shop_owned",
+      "Cette boutique est déjà enregistrée. Contactez Stockify.",
+    );
   if (existingWorkspace === undefined && count >= workspace.shopLimit)
-    throw new Error("Quota de boutiques atteint.");
+    throw new ShopLinkError("shop_limit", "Quota de boutiques atteint.");
 }
 export async function linkShop(input: {
   workspaceId: string;

@@ -43,3 +43,16 @@ Toutes les boutiques rattachées comptent dans le quota, même déconnectées. U
 `pnpm test`, `pnpm exec tsc --noEmit`, `pnpm build`.
 
 La migration et les scénarios simultanés doivent également être validés sur une base PostgreSQL de recette avant activation en production. Les tests unitaires ne remplacent pas cette vérification.
+
+
+## Parcours autonome gratuit
+
+En mode SaaS, `/account/register` crée le compte, son espace « Accès découverte » et son rôle propriétaire dans une transaction unique. Le quota est défini côté serveur par `STOCKIFY_FREE_SHOP_LIMIT` (1 par défaut, entre 1 et 100). Le client ne peut pas le choisir. `STOCKIFY_PUBLIC_SIGNUP=false` ferme les inscriptions ; elles sont ouvertes par défaut en mode SaaS. Aucun paiement ni e-mail automatique n’est envoyé. La vérification de possession de l’adresse e-mail et la récupération autonome restent à ajouter avant ouverture commerciale ; l’interface ne prétend pas vérifier l’e-mail.
+
+Une adresse déjà enregistrée, y compris par invitation, ne peut pas être revendiquée via l’inscription publique. La création ne rattache aucune boutique historique et ne donne jamais le rôle administrateur. Limitation des créations : 10 tentatives par adresse et 10 globalement par fenêtre de 15 minutes pour cette phase de test.
+
+Parcours : inscription → domaine Shopify → autorisation Shopify → retour à « Mes boutiques » → lancement explicite de l’import → inventaire. L’import affiche un état d’attente réel, sans pourcentage fictif ; en cas d’erreur, un bouton permet de réessayer. Une boutique déjà importée s’ouvre directement. Les lecteurs ne peuvent pas lancer d’import.
+
+Sur le serveur de test, l’application Shopify doit autoriser exactement l’URL de retour HTTPS de test `/api/shopify/callback` pour tester une nouvelle connexion. Utiliser une boutique Shopify de développement et une application dédiée au test. La copie de base peut contenir des jetons de production : ne pas effectuer d’ajustements depuis la recette. Les boutiques historiques doivent toujours être attribuées explicitement ; aucun mécanisme de récupération par un inconnu n’est ajouté.
+
+Cette évolution ne nécessite pas de nouvelle migration après `202609280001_saas`. Construire une nouvelle image et recréer le conteneur de test pour voir les nouveaux écrans.
