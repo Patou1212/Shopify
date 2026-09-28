@@ -1,3 +1,4 @@
+import { saasEnabled } from "@/lib/account";
 import { Portal } from "@/app/components/portal";
 import { RetryAdjustment } from "@/app/inventory/controls";
 import { requireShop } from "@/lib/session";
@@ -17,8 +18,23 @@ export default async function History({
     skip: (page - 1) * 50,
     take: 51,
   });
+  const actors = saasEnabled()
+    ? await db.account.findMany({
+        where: {
+          id: {
+            in: rows.flatMap((r) =>
+              r.actorSessionId ? [r.actorSessionId] : [],
+            ),
+          },
+        },
+        select: { id: true, name: true, email: true },
+      })
+    : [];
+  const actorNames = new Map(
+    actors.map((a) => [a.id, `${a.name} (${a.email})`]),
+  );
   return (
-    <Portal active="history" shop={shop}>
+    <Portal saas={saasEnabled()} active="history" shop={shop}>
       <a href="/inventory">← Inventaire</a>
       <h1>Historique des ajustements Stockify</h1>
       <p>
@@ -26,8 +42,9 @@ export default async function History({
         historique.
       </p>
       <p>
-        Les sessions actuelles identifient une boutique, pas encore une
-        personne.{" "}
+        {saasEnabled()
+          ? "Les ajustements réalisés avec un compte Stockify identifient leur auteur. Les anciennes sessions restent anonymes."
+          : "Les sessions actuelles identifient une boutique, pas encore une personne."}{" "}
         <a href="/audit?tab=stock">
           Voir les écarts détectés lors des synchronisations →
         </a>
@@ -56,7 +73,8 @@ export default async function History({
                 <td>{r.location.name}</td>
                 <td>
                   {r.actorSessionId
-                    ? `Session ${r.actorSessionId}`
+                    ? actorNames.get(r.actorSessionId) ||
+                      `Session ${r.actorSessionId}`
                     : "Auteur non identifié (ancienne session)"}
                 </td>
                 <td>

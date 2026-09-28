@@ -1,3 +1,4 @@
+import { saasEnabled } from "@/lib/account";
 import { Portal, StockBadge } from "@/app/components/portal";
 import { db } from "@/lib/db";
 import { requireShop } from "@/lib/session";
@@ -130,7 +131,7 @@ export default async function Inventory({
       : a.localeCompare(b, "fr", { numeric: true });
   };
   return (
-    <Portal active="inventory" shop={shop}>
+    <Portal saas={saasEnabled()} active="inventory" shop={shop}>
       <header className="page-heading">
         <div>
           <span className="eyebrow">VOTRE ESPACE DE GESTION</span>

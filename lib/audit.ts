@@ -1,3 +1,4 @@
+import { saasEnabled } from "@/lib/account";
 import { db } from "@/lib/db";
 import type { Prisma } from "@prisma/client";
 import type { Snapshot } from "./audit-diff";
@@ -52,6 +53,13 @@ export async function logConnection(
   sessionId: string,
   demo: boolean,
 ) {
+  const account =
+    saasEnabled() && !demo
+      ? await db.account.findUnique({
+          where: { id: sessionId },
+          select: { name: true, email: true },
+        })
+      : null;
   await db.auditEvent.create({
     data: {
       shopId,
@@ -59,9 +67,12 @@ export async function logConnection(
       action: demo ? "Ouverture démonstration" : "Connexion boutique réussie",
       subject: demo ? "Session de démonstration" : "Session Shopify",
       source: demo ? "Démonstration" : "Stockify",
-      actor: `Session ${sessionId}`,
-      details:
-        "Identité individuelle non disponible. Cette connexion identifie la boutique, pas un salarié.",
+      actor: account
+        ? `${account.name} (${account.email})`
+        : `Session ${sessionId}`,
+      details: account
+        ? "Accès à la boutique depuis un compte Stockify authentifié."
+        : "Identité individuelle non disponible. Cette connexion identifie la boutique, pas un salarié.",
     },
   });
 }
