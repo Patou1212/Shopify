@@ -43,7 +43,7 @@ export async function linkShop(input: {
 }) {
   return db.$transaction(async (tx) => {
     // Serialize aliases of the same Shopify shop, including across workspaces.
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${input.shopifyId}))`;
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${input.shopifyId}))`;
     const workspace = await tx.workspace.update({
       where: { id: input.workspaceId },
       data: { updatedAt: new Date() },

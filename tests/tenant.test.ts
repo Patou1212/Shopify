@@ -31,7 +31,7 @@ test("counts new shops against quota but allows reconnecting own shop", () => {
 });
 test("does not save credentials for a Shopify alias owned by another client", async () => {
   const tx = {
-    $queryRaw: vi.fn(),
+    $executeRaw: vi.fn(),
     workspace: {
       update: vi
         .fn()
@@ -63,5 +63,5 @@ test("does not save credentials for a Shopify alias owned by another client", as
   ).rejects.toThrow();
   expect(tx.shop.update).not.toHaveBeenCalled();
   expect(tx.shop.create).not.toHaveBeenCalled();
-  expect(tx.$queryRaw).toHaveBeenCalled();
+  expect(tx.$executeRaw).toHaveBeenCalled();
 });
