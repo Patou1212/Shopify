@@ -1,3 +1,4 @@
+import { saasEnabled } from "@/lib/account";
 import { Portal } from "@/app/components/portal";
 import { requireShop } from "@/lib/session";
 import { db } from "@/lib/db";
@@ -48,6 +49,7 @@ export default async function Audit({
     `/audit?${new URLSearchParams({ tab, q, page: String(page) })}`;
   return (
     <Portal
+      saas={saasEnabled()}
       active={tab === "connections" ? "connections" : "audit"}
       shop={shop}
     >
@@ -86,12 +88,16 @@ export default async function Audit({
         <aside className="audit-notice">
           <strong>
             {tab === "connections"
-              ? "Identification individuelle à configurer"
+              ? saasEnabled()
+                ? "Accès des comptes Stockify"
+                : "Identification individuelle à configurer"
               : "Ce que ce journal permet de vérifier"}
           </strong>
           <p>
             {tab === "connections"
-              ? "Les nouvelles connexions réussies à Stockify sont enregistrées à partir de maintenant. Une session de boutique ne permet pas encore de savoir quel salarié se connecte. Les connexions anciennes et celles réalisées directement dans Shopify ne sont pas disponibles."
+              ? saasEnabled()
+                ? "Les ouvertures de boutique effectuées depuis un compte Stockify sont nominatives. Les accès anciens et les connexions directes à Shopify ne sont pas identifiés par ce journal."
+                : "Les nouvelles connexions réussies à Stockify sont enregistrées à partir de maintenant. Une session de boutique ne permet pas encore de savoir quel salarié se connecte. Les connexions anciennes et celles réalisées directement dans Shopify ne sont pas disponibles."
               : "Les changements sont détectés lors des synchronisations réussies, à la date du constat. Leur auteur et leur heure exacte ne sont pas fournis par cette comparaison. Le premier import constitue un état initial, pas une création de produit. Les changements intermédiaires peuvent ne pas être visibles."}
           </p>
         </aside>

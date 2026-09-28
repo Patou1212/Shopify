@@ -8,6 +8,9 @@ datasource db {
 }
 
 model Shop {
+  workspaceId String?
+  workspace Workspace? @relation(fields: [workspaceId], references: [id])
+  @@index([workspaceId])
   id String @id @default(cuid())
   domain String @unique
   name String?
@@ -135,4 +138,71 @@ model AuditEvent {
   createdAt DateTime @default(now())
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
   @@index([shopId, category, createdAt])
+}
+
+model Workspace {
+ id String @id @default(cuid())
+ name String
+ plan String @default("Solo")
+ shopLimit Int @default(1)
+ suspended Boolean @default(false)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ members Membership[]
+ shops Shop[]
+ invitations Invitation[]
+}
+model Account {
+ id String @id @default(cuid())
+ email String @unique
+ name String
+ passwordHash String?
+ platformAdmin Boolean @default(false)
+ disabled Boolean @default(false)
+ createdAt DateTime @default(now())
+ memberships Membership[]
+ sessions AccountSession[]
+ invitations Invitation[]
+}
+model Membership {
+ id String @id @default(cuid())
+ accountId String
+ workspaceId String
+ role String @default("VIEWER")
+ account Account @relation(fields:[accountId],references:[id],onDelete:Cascade)
+ workspace Workspace @relation(fields:[workspaceId],references:[id],onDelete:Cascade)
+ @@unique([accountId,workspaceId])
+}
+model AccountSession {
+ id String @id @default(cuid())
+ tokenHash String @unique
+ accountId String
+ expiresAt DateTime
+ createdAt DateTime @default(now())
+ account Account @relation(fields:[accountId],references:[id],onDelete:Cascade)
+}
+model Invitation {
+ id String @id @default(cuid())
+ tokenHash String @unique
+ accountId String
+ workspaceId String
+ role String
+ expiresAt DateTime
+ usedAt DateTime?
+ account Account @relation(fields:[accountId],references:[id],onDelete:Cascade)
+ workspace Workspace @relation(fields:[workspaceId],references:[id],onDelete:Cascade)
+}
+model AuthThrottle {
+ key String @id
+ attempts Int @default(0)
+ resetAt DateTime
+}
+model PlatformEvent {
+ id String @id @default(cuid())
+ actorId String
+ action String
+ target String
+ details String
+ createdAt DateTime @default(now())
+ @@index([createdAt])
 }

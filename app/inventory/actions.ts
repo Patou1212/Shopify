@@ -6,7 +6,7 @@ import { synchronize } from "@/lib/shopify/sync";
 import { adjust } from "@/lib/shopify/adjust";
 import { revalidatePath } from "next/cache";
 export async function syncAction() {
-  const shop = await requireShop();
+  const shop = await requireShop(undefined, true);
   if (shop.id === DEMO_SHOP_ID)
     return {
       message:
@@ -32,7 +32,7 @@ export async function adjustAction(
   reason: string,
   key: string,
 ) {
-  const shop = await requireShop();
+  const shop = await requireShop(undefined, true);
   try {
     const result = await (shop.id === DEMO_SHOP_ID ? adjustDemo : adjust)(
       shop,
@@ -56,7 +56,7 @@ export async function adjustAction(
 }
 
 export async function retryAction(id: string) {
-  const shop = await requireShop();
+  const shop = await requireShop(undefined, true);
   const record = await db.inventoryAdjustment.findFirst({
     where: { id, shopId: shop.id },
   });

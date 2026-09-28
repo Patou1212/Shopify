@@ -1,3 +1,4 @@
+import { saasEnabled } from "@/lib/account";
 import { Portal } from "@/app/components/portal";
 import { requireShop } from "@/lib/session";
 import { db } from "@/lib/db";
@@ -35,7 +36,7 @@ export default async function Dashboard() {
     synced: l.syncedAt.toISOString(),
   }));
   return (
-    <Portal active="dashboard" shop={shop}>
+    <Portal saas={saasEnabled()} active="dashboard" shop={shop}>
       <StockStudio
         rows={rows}
         synced={shop.lastSyncedAt?.toISOString() || null}

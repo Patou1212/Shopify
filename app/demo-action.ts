@@ -1,4 +1,5 @@
 "use server";
+import { saasEnabled } from "@/lib/account";
 import { randomUUID } from "node:crypto";
 import { logConnection } from "@/lib/audit";
 import { cookies } from "next/headers";
@@ -7,7 +8,8 @@ import { demoEnabled, DEMO_SHOP_ID } from "@/lib/demo";
 import { db } from "@/lib/db";
 import { sessionToken } from "@/lib/session";
 export async function openDemo() {
-  if (!demoEnabled()) throw new Error("Démonstration indisponible");
+  if (saasEnabled() || !demoEnabled())
+    throw new Error("Démonstration indisponible");
   const shop = await db.shop.findUniqueOrThrow({ where: { id: DEMO_SHOP_ID } });
   const sid = randomUUID();
   await logConnection(shop.id, sid, true);

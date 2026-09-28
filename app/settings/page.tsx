@@ -1,3 +1,4 @@
+import { saasEnabled } from "@/lib/account";
 import { Portal } from "@/app/components/portal";
 import { requireShop } from "@/lib/session";
 import { db } from "@/lib/db";
@@ -9,7 +10,7 @@ export default async function Settings() {
     orderBy: { name: "asc" },
   });
   return (
-    <Portal active="settings" shop={shop}>
+    <Portal saas={saasEnabled()} active="settings" shop={shop}>
       <header className="page-heading">
         <div>
           <span className="eyebrow">VOTRE CONNEXION</span>

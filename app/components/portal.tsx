@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 export function Portal({
   active,
+  saas = false,
   shop,
   children,
 }: {
   active: string;
+  saas?: boolean;
   shop: { name: string | null; domain: string };
   children: ReactNode;
 }) {
@@ -16,6 +18,7 @@ export function Portal({
           <span className="brand-caption">GESTION D’INVENTAIRE</span>
         </a>
         <div className="shop-identity">
+          {saas && <a href="/account">Mes boutiques et mon équipe</a>}
           <span className="status-dot" />
           <span>{shop.name || shop.domain}</span>
           <span className="avatar">

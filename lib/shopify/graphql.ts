@@ -1,7 +1,7 @@
 import type { Shop } from "@prisma/client";
 import { decryptSecret } from "@/lib/crypto";
 export async function shopifyGraphql<T>(
-  shop: Shop,
+  shop: Pick<Shop, "id" | "domain" | "apiVersion" | "encryptedAccessToken">,
   query: string,
   variables: Record<string, unknown> = {},
 ): Promise<T> {
