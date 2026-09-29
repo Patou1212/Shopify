@@ -1,7 +1,8 @@
+import { WorkspaceHeader } from "./workspace-header";
 import { requireAccount } from "@/lib/account";
 import { db } from "@/lib/db";
 import { connectionError, roles } from "@/lib/onboarding";
-import { logout, selectShop } from "./actions";
+import { selectShop } from "./actions";
 import { InvitationForm } from "./forms";
 import { ConnectForm, ImportForm, Steps } from "./onboarding-forms";
 export default async function AccountPage({
@@ -39,29 +40,14 @@ export default async function AccountPage({
   });
   return (
     <main className="saas-shell">
-      <header className="saas-header">
-        <div>
-          <a href="/account" className="saas-brand">
-            stockify
-          </a>
-          <h1>Mes boutiques</h1>
-          <p>
-            Bonjour {account.name}. Retrouvez votre inventaire et votre équipe.
-          </p>
-        </div>
-        <nav>
-          {account.platformAdmin && (
-            <a href="/admin">Administration · Mes clients</a>
-          )}
-          <form action={logout}>
-            <button className="saas-secondary">Se déconnecter</button>
-          </form>
-        </nav>
-      </header>
+      <WorkspaceHeader name={account.name} admin={account.platformAdmin} />
       {error && (
         <section role="alert" className="saas-notice">
           <strong>La boutique n’a pas été connectée</strong>
           <p>{error}</p>
+          <a href="/account/help/shopify">
+            Comprendre et résoudre ce blocage →
+          </a>
         </section>
       )}
       {params.welcome && (
@@ -138,7 +124,9 @@ export default async function AccountPage({
                       <p className="saas-domain">{shop.domain}</p>
                       {params.connected === shop.id && (
                         <p role="status" className="saas-success">
-                          Autorisation Shopify reçue.
+                          {shop.lastSyncedAt
+                            ? "Boutique reconnectée avec succès. Vos données ont été conservées."
+                            : "Boutique connectée. Vous pouvez maintenant importer vos produits."}
                         </p>
                       )}
                       {shop.status === "ACTIVE" &&
