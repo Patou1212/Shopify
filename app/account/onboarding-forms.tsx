@@ -117,6 +117,9 @@ export function ConnectForm({ workspaceId }: { workspaceId: string }) {
           {error}
         </p>
       )}
+      <a href="/account/help/shopify" target="_blank" rel="noreferrer">
+        Besoin d’aide ? Voir le guide de connexion ↗
+      </a>
       <button disabled={pending}>
         {pending ? "Ouverture de Shopify…" : "Connecter Shopify →"}
       </button>
