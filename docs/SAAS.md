@@ -56,3 +56,16 @@ Parcours : inscription → domaine Shopify → autorisation Shopify → retour �
 Sur le serveur de test, l’application Shopify doit autoriser exactement l’URL de retour HTTPS de test `/api/shopify/callback` pour tester une nouvelle connexion. Utiliser une boutique Shopify de développement et une application dédiée au test. La copie de base peut contenir des jetons de production : ne pas effectuer d’ajustements depuis la recette. Les boutiques historiques doivent toujours être attribuées explicitement ; aucun mécanisme de récupération par un inconnu n’est ajouté.
 
 Cette évolution ne nécessite pas de nouvelle migration après `202609280001_saas`. Construire une nouvelle image et recréer le conteneur de test pour voir les nouveaux écrans.
+
+
+## Connexion multi-clients Shopify
+
+Chaque boutique conserve son propre domaine, identifiant Shopify, jeton chiffré et rattachement à un espace. Le Client ID et le secret identifient l’application Stockify centrale, pas le marchand. Le marchand autorise l’application via OAuth avec son propre compte Shopify ; aucun champ de mot de passe Shopify ni de secret API marchand ne doit être ajouté au parcours standard.
+
+Le mode de distribution doit être validé dans le Dev Dashboard avant de proposer Stockify à des clients indépendants. Une distribution personnalisée cible une boutique ou une organisation Shopify Plus ; une distribution publique est destinée à plusieurs marchands et implique les exigences de publication Shopify. Ne pas confondre la publication d’une version dans le Dev Dashboard et l’autorisation de distribuer à tous les marchands.
+
+Vérifier aussi l’URL d’application, la liste exacte des URL de retour (production et, pour une application dédiée, recette), les portées demandées et les droits d’installation du marchand. Guide client intégré : `/account/help/shopify`.
+
+Références officielles :
+- https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps
+- https://shopify.dev/docs/apps/launch/distribution
