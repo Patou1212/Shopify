@@ -5,6 +5,8 @@ export const roles: Record<string, string> = {
   VIEWER: "Lecture seule",
 };
 export const connectionErrors: Record<string, string> = {
+  shop_limit_or_owner:
+    "Cette connexion a été bloquée par la limite de boutiques ou par un rattachement existant. Réessayez pour afficher le motif précis ; ne créez pas de nouvelle clé API.",
   invalid_shop:
     "Saisissez le domaine Shopify de votre boutique, par exemple ma-boutique.myshopify.com. Vous le trouverez dans Shopify → Paramètres → Domaines.",
   shop_limit:
