@@ -1,10 +1,13 @@
+import { DataUniverse } from "../data-universe";
 import { LoginForm } from "../forms";
 import { accountSession, saasEnabled } from "@/lib/account";
 import { redirect } from "next/navigation";
 export default async function LoginPage() {
   if (await accountSession()) redirect("/account");
   return (
-    <main className="saas-shell saas-login">
+    <main className="saas-shell saas-auth">
+      <DataUniverse />
+      <div className="saas-auth-form">
       <a href="/" className="saas-brand">
         stockify<span>Votre stock, en toute clarté.</span>
       </a>
@@ -27,6 +30,7 @@ export default async function LoginPage() {
           Stockify pour recevoir un nouveau lien.
         </p>
       </details>
+    </div>
     </main>
   );
 }
