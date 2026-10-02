@@ -1,0 +1,53 @@
+/* Shared data palette. Server-selected cookie prevents a light flash. */
+html[data-theme] { --accent:#7760ed; --green:#16856c; --red:#be334d; --amber:#996313; --bg:#f0f3fb; --surface:#fff; --text:#192442; --muted:#586782; --border:#dce2ef; --soft:#edf0fa; --tint:#ece7ff; --positive:#e2f7ed; --warning:#fff0d2; --negative:#ffe5ec; color-scheme:light; }
+html[data-theme=dark] { --bg:#0c1221; --surface:#151f33; --text:#e8edf8; --muted:#a8b5cd; --border:#2c3851; --soft:#1c2941; --tint:#302750; --green:#60dfb5; --red:#ff91a5; --amber:#f7c474; --positive:#123a32; --warning:#3d3020; --negative:#402334; color-scheme:dark; }
+html[data-theme] body { background:var(--bg); color:var(--text); padding-bottom:70px; }
+html[data-theme] body:has(.saas-shell) { background:radial-gradient(ellipse at 90% 0%,#7760ed14,transparent 55%),var(--bg); }
+html[data-theme] .theme-toggle { position:fixed; bottom:18px; right:20px; z-index:100; display:flex; align-items:center; gap:9px; background:var(--surface); color:var(--text); border:1px solid var(--border); border-radius:30px; padding:11px 17px; box-shadow:0 5px 25px #0002; font-size:13px; }
+html[data-theme] .theme-toggle:hover { background:var(--soft); }
+html[data-theme] :is(input,select,textarea) { background:var(--soft); color:var(--text); border-color:var(--border); }
+html[data-theme] :is(input,textarea)::placeholder { color:var(--muted); opacity:1; }
+html[data-theme] :is(button,a,input,select,summary):focus-visible { outline:3px solid #9f8dff; outline-offset:3px; }
+html[data-theme] .portal { background:var(--bg); }
+html[data-theme] :is(.app-header,.portal-nav) { background:var(--surface); border-color:var(--border); }
+html[data-theme] .brand-mark { background:linear-gradient(140deg,#8064f6,#3c80d1); }
+html[data-theme] .portal-nav a.active { color:#ac99ff; border-color:#9a82ff; }
+html[data-theme=light] .portal-nav a.active { color:#5940cc; }
+html[data-theme] .portal-main { max-width:1600px; margin:auto; }
+html[data-theme] :is(.stat-tile,.inventory-workspace,.adjust-dialog,.studio-panel,.studio-filters,.studio-group,.studio-kpi,.studio-empty,.card) { background:var(--surface); color:var(--text); border-color:var(--border); box-shadow:0 8px 30px #00000008; }
+html[data-theme] .stat-tile { border-radius:16px; border-top:3px solid #9077ff; }
+html[data-theme] .stat-tile:nth-child(2) { border-top-color:#3ed9c1; }
+html[data-theme] .stat-tile:nth-child(3) { border-top-color:#58a7ff; }
+html[data-theme] .stat-tile:nth-child(4) { border-top-color:#f7bd70; }
+html[data-theme] .stat-tile strong { font-variant-numeric:tabular-nums; }
+html[data-theme] :is(.stat-tile > span,.studio p,.studio label,.studio-kpi > span,.studio-kpi small,.quantity-cell > small,.audit-source,.studio-table small,.studio-freshness,.studio-group summary small) { color:var(--muted); }
+html[data-theme] :is(.family-heading,.view-switch,.table thead th,.row-total,.filters,.inventory-filters,.studio-track,.studio-group-icon,.avatar,.product-monogram) { background:var(--soft); color:var(--text); border-color:var(--border); }
+html[data-theme] :is(.table th,.table td,.product-section,.product-body,.family-section) { border-color:var(--border); }
+html[data-theme] :is(.product-heading:hover,.family-heading:hover,.table tbody tr:hover) { background:var(--soft); }
+html[data-theme] :is(.stock-badge.in,.saas-success) { background:var(--positive); color:var(--green)!important; border-color:var(--green); }
+html[data-theme] .stock-badge.low { background:var(--warning); color:var(--amber); }
+html[data-theme] .stock-badge.out { background:var(--negative); color:var(--red); }
+html[data-theme] .adjust-trigger { color:var(--muted); }
+html[data-theme] .adjust-trigger:hover { background:var(--tint); color:var(--text); }
+html[data-theme] .studio { color:var(--text); --studio-line:var(--border); }
+html[data-theme] .studio h2 { color:var(--text); }
+html[data-theme] .studio-kpi.kpi-0 { background:linear-gradient(120deg,#5140ac,#235779); color:white; border-color:#7562c6; }
+html[data-theme] :is(.studio-button,.sync-control button) { background:#654cda; color:white; border-color:#8069ec; }
+html[data-theme] :is(.view-switch a.active,.studio-viewbar button[aria-pressed=true]) { background:var(--tint); color:var(--text); }
+html[data-theme] :is(.saas-shell,.saas-shell h1,.saas-shell h2,.saas-shell h3) { color:var(--text); }
+html[data-theme] :is(.saas-header,.saas-card,.saas-auth,.team-section) { background:var(--surface); border-color:var(--border); }
+html[data-theme] :is(.saas-shell p,.saas-muted,.saas-brand span,.workspace-eyebrow) { color:var(--muted); }
+html[data-theme] .saas-shell a { color:#b5a4ff; }
+html[data-theme=light] .saas-shell a { color:#4935bc; }
+html[data-theme] :is(.saas-tag,.saas-header nav a[aria-current=page]) { background:var(--tint); color:var(--text); }
+html[data-theme] .saas-shell .saas-secondary { background:var(--soft); color:var(--text); border-color:var(--border); }
+html[data-theme] .onboarding-card { background:linear-gradient(120deg,#7760ed15,transparent 60%),var(--surface); border-top-color:#9077ff; }
+html[data-theme] .onboarding-steps { background:var(--surface); border-color:var(--border); }
+html[data-theme] .onboarding-steps li { color:var(--muted); }
+html[data-theme] .onboarding-steps .current { color:var(--text); }
+html[data-theme] .saas-row { border-color:var(--border); }
+html[data-theme] :is(.saas-notice,.audit-notice) { background:var(--warning); color:var(--amber); border-color:var(--border); }
+html[data-theme] .import-status { background:var(--soft); }
+html[data-theme] .saas-shell .data-universe h2 { color:white; }
+html[data-theme] .saas-shell .data-universe p { color:#c8d3e6; }
+@media(max-width:650px) { html[data-theme] .theme-toggle { bottom:12px; right:12px; } }
