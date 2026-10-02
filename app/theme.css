@@ -1,6 +1,6 @@
 /* Shared data palette. Server-selected cookie prevents a light flash. */
 html[data-theme] { --accent:#7760ed; --green:#16856c; --red:#be334d; --amber:#996313; --bg:#f0f3fb; --surface:#fff; --text:#192442; --muted:#586782; --border:#dce2ef; --soft:#edf0fa; --tint:#ece7ff; --positive:#e2f7ed; --warning:#fff0d2; --negative:#ffe5ec; color-scheme:light; }
-html[data-theme=dark] { --bg:#0c1221; --surface:#151f33; --text:#e8edf8; --muted:#a8b5cd; --border:#2c3851; --soft:#1c2941; --tint:#302750; --green:#60dfb5; --red:#ff91a5; --amber:#f7c474; --positive:#123a32; --warning:#3d3020; --negative:#402334; color-scheme:dark; }
+html[data-theme=dark] { --bg:#293446; --surface:#354257; --text:#f0f3f8; --muted:#c2ccdc; --border:#536178; --soft:#3e4d64; --tint:#514f70; --green:#a2dfc9; --red:#f4b2bd; --amber:#edd0a1; --positive:#354f4c; --warning:#554c3e; --negative:#574451; color-scheme:dark; }
 html[data-theme] body { background:var(--bg); color:var(--text); padding-bottom:70px; }
 html[data-theme] body:has(.saas-shell) { background:radial-gradient(ellipse at 90% 0%,#7760ed14,transparent 55%),var(--bg); }
 html[data-theme] .theme-toggle { position:fixed; bottom:18px; right:20px; z-index:100; display:flex; align-items:center; gap:9px; background:var(--surface); color:var(--text); border:1px solid var(--border); border-radius:30px; padding:11px 17px; box-shadow:0 5px 25px #0002; font-size:13px; }
@@ -51,3 +51,14 @@ html[data-theme] .import-status { background:var(--soft); }
 html[data-theme] .saas-shell .data-universe h2 { color:white; }
 html[data-theme] .saas-shell .data-universe p { color:#c8d3e6; }
 @media(max-width:650px) { html[data-theme] .theme-toggle { bottom:12px; right:12px; } }
+
+/* A softer slate theme: lifted surfaces and restrained accents. */
+html[data-theme=dark] { --accent:#8878ce; }
+html[data-theme=dark] .saas-shell button:not(.saas-secondary) { background:#7768bd; box-shadow:none; }
+html[data-theme=dark] :is(.sync-control button,.studio-button) { background:#7768bd; border-color:#9a8cd3; }
+html[data-theme=dark] .stat-tile { border-top-color:#ad9ddd; box-shadow:0 5px 18px #17202e12; }
+html[data-theme=dark] .stat-tile:nth-child(2) { border-top-color:#9dcfc5; }
+html[data-theme=dark] .stat-tile:nth-child(3) { border-top-color:#a1beda; }
+html[data-theme=dark] .stat-tile:nth-child(4) { border-top-color:#dcc399; }
+html[data-theme=dark] .data-universe { background:radial-gradient(ellipse at 90% 15%,#6f648c55,transparent 60%),linear-gradient(150deg,#374459,#405768); }
+html[data-theme=dark] .onboarding-card { border-top-color:#ad9ddd; }
