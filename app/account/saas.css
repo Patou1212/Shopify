@@ -280,3 +280,63 @@
 .saas-header nav { flex-wrap: wrap; }
 .saas-header nav a[aria-current="page"] { font-weight: 700; text-decoration-thickness: 2px; text-underline-offset: 6px; }
 .shop-options > .saas-form { margin-top: 20px; }
+
+/* Stockify data identity */
+body:has(.saas-shell) { background: #f1f3fb; background-image: radial-gradient(ellipse at 85% 0%, #dedbff 0, transparent 45%), radial-gradient(ellipse at 0% 90%, #d6f4ee 0, transparent 40%); }
+.saas-shell { color: #172142; max-width: 1240px; }
+.saas-shell h1 { font-size: clamp(30px, 3.5vw, 44px); letter-spacing: -1.8px; line-height: 1.12; }
+.saas-shell h2, .saas-shell h3 { color: #172142; }
+.saas-shell p { color: #53617a; }
+.saas-shell .saas-brand { color: #4936c9; display: inline-block; }
+.saas-brand::before { content: ''; display: inline-block; width: 22px; height: 24px; margin-right: 9px; vertical-align: -2px; background: linear-gradient(to top,#6353ec 0 100%) 0 100%/5px 45% no-repeat, linear-gradient(to top,#21bba9 0 100%) 8px 100%/5px 75% no-repeat, linear-gradient(to top,#6353ec 0 100%) 16px 100%/5px 100% no-repeat; }
+.saas-card { border-color: #e1e5f2; border-radius: 22px; box-shadow: 0 10px 36px #26376508; }
+.saas-shell button { background: #5941d9; box-shadow: 0 4px 12px #5941d920; border-radius: 12px; min-height: 46px; transition: background .18s, transform .18s; }
+.saas-shell button:hover:not(:disabled) { background: #4430b8; transform: translateY(-1px); }
+.saas-shell a { color: #4935bc; }
+.saas-shell .saas-secondary { background: #fff; color: #36415d; box-shadow: none; }
+.saas-shell .saas-secondary:hover { background: #eeeafd; }
+.saas-tag { background: #eeeaff; color: #4d37b0; font-weight: 600; }
+.saas-form input, .saas-form select { background: #f9faff; border: 1px solid #ccd3e7; border-radius: 11px; min-height: 46px; }
+.saas-form input[type=checkbox] { min-height: auto; }
+.saas-form input:focus-visible, .saas-form select:focus-visible { outline: 3px solid #c1b6fc; outline-offset: 2px; border-color: #6951dc; }
+.saas-header { padding: 30px 32px; border: 1px solid #ffffff; border-radius: 24px; background: #ffffffbd; box-shadow: 0 8px 35px #23326305; }
+.workspace-eyebrow { display: block; color: #687493; font-size: 10px; letter-spacing: 2px; margin-top: 25px; font-weight: 700; }
+.saas-header nav { gap: 8px; }
+.saas-header nav > a { padding: 12px 15px; border-radius: 11px; text-decoration: none; font-size: 14px; }
+.saas-header nav a[aria-current=page] { background: #eae5ff; color: #4936ba; }
+.onboarding-steps { padding: 18px 22px; border: 1px solid #e0e3f2; border-radius: 16px; background: #ffffff85; }
+.onboarding-steps .current { color: #5840cc; }
+.onboarding-steps .current span { background: #6048db; border-color: #6048db; box-shadow: 0 0 0 5px #ece8ff; }
+.onboarding-steps .done span { background: #087f70; border-color: #087f70; }
+.onboarding-card { overflow: hidden; background: linear-gradient(115deg,#eef0ff 0%,#f3fffc 43%,white 43%); border-top: 4px solid #7761ed; }
+.onboarding-card > div:first-child { padding: 8px 12px 8px 0; }
+.shop-card { position: relative; border-top: 4px solid #6250db; }
+.shop-card:nth-child(3n+2) { border-top-color: #15a58e; }
+.shop-card:nth-child(3n+3) { border-top-color: #e9a14e; }
+.team-section { background: #ffffffa8; }
+.saas-auth { display: grid; grid-template-columns: 1.05fr 1fr; gap: 0; padding: 0; margin: 40px auto; border-radius: 30px; overflow: hidden; background: #fff; border: 1px solid #e3e6f2; box-shadow: 0 22px 80px #26376512; min-height: 740px; }
+.saas-auth-form { padding: 52px 48px; min-width: 0; align-self: center; }
+.saas-auth-form h1 { font-size: clamp(30px,3vw,38px); margin-top: 32px; }
+.saas-auth-form .saas-card { border: 0; box-shadow: none; padding: 12px 0; margin: 12px 0; }
+.saas-auth-form .onboarding-steps { flex-wrap: wrap; gap: 12px; padding: 12px; }
+.data-universe { position: relative; overflow: hidden; padding: 52px 46px; background: radial-gradient(ellipse at 90% 15%,#49399b 0,transparent 60%),linear-gradient(155deg,#162442,#182442 60%,#144a50); color: #fff; }
+.data-universe::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px); background-size: 36px 36px; pointer-events: none; }
+.data-universe > * { position: relative; }
+.data-eyebrow { font-size: 10px; letter-spacing: 2px; color: #c5c1ef; font-weight: 700; }
+.saas-shell .data-universe h2 { font-size: clamp(40px,4.7vw,62px); line-height: 1.07; letter-spacing: -2.5px; color: white; margin: 45px 0 24px; }
+.data-universe em { font-style: normal; color: #79efcf; }
+.saas-shell .data-universe p { color: #c8d3e6; max-width: 370px; font-size: 15px; }
+.data-visual { margin-top: 38px; padding: 22px; background: #ffffff08; border: 1px solid #ffffff20; border-radius: 20px; box-shadow: 0 16px 40px #00000012; transform: rotate(-2deg); }
+.data-visual-top { display: flex; justify-content: space-between; align-items: center; font-size: 9px; letter-spacing: 1.5px; color: #d5dced; }
+.data-dot { width: 7px; height: 7px; border-radius: 50%; background: #70f1d1; box-shadow: 0 0 0 5px #70f1d112; }
+.data-visual svg { width: 100%; margin-top: 24px; }
+.data-bars { height: 62px; display: flex; align-items: flex-end; gap: 9px; margin: 12px 0 20px; }
+.data-bars span { flex: 1; border-radius: 4px 4px 0 0; background: #9986ef; opacity: .8; }
+.data-bars span:nth-child(3n) { background: #6ce9d0; }
+.data-legend { display: flex; gap: 18px; font-size: 10px; color: #d9dfef; }
+.data-legend span:nth-child(2) { color: #bdadff; }
+.data-legend span:nth-child(3) { color: #70f1d1; }
+.data-footnote { display: block; margin-top: 24px; color: #b7c6db; font-size: 10px; line-height: 1.5; }
+@media(max-width: 900px) { .saas-auth { margin: 20px; grid-template-columns: 1fr 1fr; } .data-universe, .saas-auth-form { padding: 34px 26px; } .saas-header { align-items: flex-start; flex-direction: column; } }
+@media(max-width: 650px) { .saas-auth { display: flex; flex-direction: column; margin: 12px; border-radius: 22px; } .data-universe { padding: 28px; } .saas-shell .data-universe h2 { font-size: 38px; margin: 22px 0 14px; } .data-visual, .data-footnote { display: none; } .saas-auth-form { padding: 28px 24px; width: 100%; } .saas-header { padding: 22px; } .saas-header nav { width: 100%; } .saas-header nav form { margin-top: 6px; } .onboarding-card { background: linear-gradient(160deg,#eff0ff,white 65%); } }
+@media(prefers-reduced-motion: reduce) { .saas-shell button { transition: none; } .saas-shell button:hover:not(:disabled) { transform: none; } }
