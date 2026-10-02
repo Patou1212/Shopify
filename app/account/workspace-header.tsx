@@ -9,6 +9,7 @@ export function WorkspaceHeader({ name, admin, section = "shops" }: {
     <header className="saas-header">
       <div>
         <a href="/account" className="saas-brand">stockify</a>
+        <span className="workspace-eyebrow">VOTRE CENTRE DE PILOTAGE</span>
         <h1>{section === "clients" ? "Mes clients" : "Mes boutiques"}</h1>
         <p>Bonjour {name}. {section === "clients"
           ? "Retrouvez les espaces clients et gérez leurs accès."
