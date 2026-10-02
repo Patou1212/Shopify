@@ -1,3 +1,4 @@
+import { DataUniverse } from "../data-universe";
 import { redirect } from "next/navigation";
 import { accountSession, saasEnabled } from "@/lib/account";
 import { RegisterForm, Steps } from "../onboarding-forms";
@@ -6,7 +7,9 @@ export default async function RegisterPage() {
   const enabled =
     saasEnabled() && process.env.STOCKIFY_PUBLIC_SIGNUP !== "false";
   return (
-    <main className="saas-shell saas-login">
+    <main className="saas-shell saas-auth">
+      <DataUniverse />
+      <div className="saas-auth-form">
       <a href="/" className="saas-brand">
         stockify<span>Votre stock, en toute clarté.</span>
       </a>
@@ -26,6 +29,7 @@ export default async function RegisterPage() {
       <p>
         Déjà un compte ? <a href="/account/login">Me connecter</a>
       </p>
+    </div>
     </main>
   );
 }
